@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# PyInstaller build artifacts
+build/
+dist/TaskbarPets.exe
+*.spec.bak
+
+# User config (personal settings, not for distribution)
+config.json
+
+# Installer output
+installer_output/
+*.exe
+!dist/TaskbarPets.exe
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary
+*.tmp
+*.bak
