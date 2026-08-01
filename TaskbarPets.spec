@@ -74,5 +74,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon=str(ROOT / "assets" / "icon.ico") if (ROOT / "assets" / "icon.ico").exists() else None,
-    version=str(ROOT / "assets" / "version.txt") if (ROOT / "assets" / "version.txt").exists() else None,
+    version=str(ROOT / "assets" / "file_version_info.txt") if (ROOT / "assets" / "file_version_info.txt").exists() else None,
 )

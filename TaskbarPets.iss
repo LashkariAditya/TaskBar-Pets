@@ -70,10 +70,7 @@ Filename: "{app}\{#AppExeName}"; Description: "Launch {#AppName} now"; Flags: no
 
 [Registry]
 ; Startup registry entry (optional task)
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run";
-    ValueType: string; ValueName: "{#AppName}";
-    ValueData: """{app}\{#AppExeName}""";
-    Flags: uninsdeletevalue; Tasks: startupicon
+Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#AppName}"; ValueData: """{app}\{#AppExeName}"""; Flags: uninsdeletevalue; Tasks: startupicon
 
 [UninstallRun]
 Filename: "taskkill"; Parameters: "/F /IM {#AppExeName}"; Flags: runhidden

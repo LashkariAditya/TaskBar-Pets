@@ -21,17 +21,26 @@ def set_autostart(enable: bool) -> bool:
     """Create or remove Windows Startup shortcut to run Taskbar Pets silently on boot."""
     try:
         if enable:
-            pythonw = sys.executable.replace("python.exe", "pythonw.exe")
-            if not os.path.exists(pythonw):
-                pythonw = sys.executable
+            if getattr(sys, "frozen", False):
+                # When compiled with PyInstaller, use TaskbarPets.exe directly
+                target_exe = sys.executable
+                arguments = ""
+                work_dir = Path(sys.executable).parent
+            else:
+                pythonw = sys.executable.replace("python.exe", "pythonw.exe")
+                if not os.path.exists(pythonw):
+                    pythonw = sys.executable
+                target_exe = pythonw
+                arguments = f'"{MAIN_PY}"'
+                work_dir = PROJECT_DIR
 
             # Create shortcut via PowerShell WScript.Shell
             ps_script = (
                 f"$WshShell = New-Object -ComObject WScript.Shell; "
                 f"$Shortcut = $WshShell.CreateShortcut('{SHORTCUT_PATH}'); "
-                f"$Shortcut.TargetPath = '{pythonw}'; "
-                f"$Shortcut.Arguments = '\"{MAIN_PY}\"'; "
-                f"$Shortcut.WorkingDirectory = '{PROJECT_DIR}'; "
+                f"$Shortcut.TargetPath = '{target_exe}'; "
+                f"$Shortcut.Arguments = '{arguments}'; "
+                f"$Shortcut.WorkingDirectory = '{work_dir}'; "
                 f"$Shortcut.WindowStyle = 7; "
                 f"$Shortcut.Description = 'Taskbar Pets Desktop Companions'; "
                 f"$Shortcut.Save()"

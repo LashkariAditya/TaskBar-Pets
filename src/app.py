@@ -83,17 +83,14 @@ def _create_pets_from_config(config: AppConfig) -> list[Pet]:
 
 
 def _make_tray_icon() -> Image.Image:
-    size = 64
-    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-
-    # Pokéball style tray icon
-    draw.ellipse([4, 4, size - 4, size - 4], fill=(235, 60, 60, 255))
-    draw.chord([4, 4, size - 4, size - 4], 0, 180, fill=(245, 245, 245, 255))
-    draw.line([4, size // 2, size - 4, size // 2], fill=(30, 30, 30, 255), width=6)
-    draw.ellipse([22, 22, 42, 42], fill=(30, 30, 30, 255))
-    draw.ellipse([26, 26, 38, 38], fill=(255, 255, 255, 255))
-    return img
+    icon_path = ROOT / "assets" / "icon.png"
+    if icon_path.exists():
+        try:
+            return Image.open(icon_path)
+        except Exception:
+            pass
+    from generate_assets import create_pokeball_logo
+    return create_pokeball_logo(64)
 
 
 class TaskbarPetsApp:
