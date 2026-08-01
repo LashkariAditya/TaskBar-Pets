@@ -294,12 +294,15 @@ class OverlayWindow:
             screen_w = self.root.winfo_screenwidth()
             safe_x = max(0, min(new_x, screen_w - pet.width))
 
-            # Save session-only custom position (cleared on restart automatically)
-            pet.custom_y = new_y
+            # Start fall physics from drop Y down to taskbar/screen floor
+            pet.custom_y = None
+            pet.curr_y = float(new_y)
+            pet.vy = 0.0
+            pet.is_falling = True
             pet.custom_x_start = safe_x
             # Reset horizontal walk counter to new origin
             pet.x = 0.0
-            pet.say("📍 Moved!")
+            pet.say("🪂 Dropping!")
         else:
             # Plain click — trigger affection
             pet.pet()
@@ -340,7 +343,7 @@ class OverlayWindow:
         menu.add_command(label="  Sleep / Wake", command=pet.toggle_sleep)
         menu.add_command(label="  Say Something", command=pet.say_random)
         menu.add_separator()
-        if pet.custom_y is not None or pet.custom_x_start is not None:
+        if pet.custom_x_start is not None:
             menu.add_command(label="  ↩️ Reset to Taskbar Position", command=lambda: self._reset_pet_pos(pet))
         else:
             menu.add_command(label="  🖱️ Drag to move (resets on restart)", state="disabled")
