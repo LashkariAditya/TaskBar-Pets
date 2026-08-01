@@ -506,6 +506,11 @@ class PetManagerWindow:
         def _on_wheel(event):
             canvas.yview_scroll(int(-1 * (event.delta / 120)) * 40, "units")
 
+        def _bind_wheel(widget):
+            widget.bind("<MouseWheel>", _on_wheel)
+            for child in widget.winfo_children():
+                _bind_wheel(child)
+
         canvas.bind("<MouseWheel>", _on_wheel)
         canvas.bind("<Enter>", lambda _: canvas.focus_set())
 
@@ -607,6 +612,10 @@ class PetManagerWindow:
             font=("Segoe UI", 9), bg=SURFACE1, fg=SUBTEXT, justify="left",
         ).pack(anchor="w")
         tk.Frame(s_frame, bg=BG, height=30).pack(fill="x")
+
+        # Bind scroll to all settings widgets so mouse wheel works everywhere
+        s_frame.update_idletasks()
+        _bind_wheel(s_frame)
 
     # ─────────────────────────────────────────────────────────────────────────
     # Actions
