@@ -54,12 +54,6 @@ Name: "startupicon";   Description: "Start &automatically with Windows (silent)"
 ; Main executable (built by build.bat / PyInstaller)
 Source: "dist\{#AppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 
-; Config template (will be copied to %APPDATA%\TaskbarPets on first run)
-Source: "config.json";         DestDir: "{app}";  Flags: ignoreversion; DestName: "config.default.json"
-
-; Silent launcher VBS script (backup)
-Source: "run_silent.vbs";      DestDir: "{app}";  Flags: ignoreversion
-
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExeName}"
 Name: "{autodesktop}\{#AppName}";  Filename: "{app}\{#AppExeName}"; Tasks: desktopicon

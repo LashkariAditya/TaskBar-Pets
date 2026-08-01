@@ -30,16 +30,16 @@ echo  [2/4] Checking Pokemon sprite assets...
 python -c "from src.sprites import has_animated_assets; exit(0 if has_animated_assets() else 1)" 2>nul
 if errorlevel 1 (
     echo  Downloading animated sprites...
-    python download_sprites.py
+    python tools\download_sprites.py
     if errorlevel 1 (
         echo  Download failed. Generating pixel sprites instead...
-        python generate_sprites.py
+        python tools\generate_sprites.py
     )
 )
 
 :: ── Generate icon ──────────────────────────────────────────────────────────────
 echo  [3/4] Generating app icon...
-python generate_assets.py
+python tools\generate_assets.py
 if errorlevel 1 ( echo  [ERROR] Asset generation failed. & pause & exit /b 1 )
 
 :: ── Build with PyInstaller ─────────────────────────────────────────────────────
@@ -47,14 +47,17 @@ echo  [4/4] Building standalone .exe with PyInstaller...
 python -m PyInstaller TaskbarPets.spec --clean --noconfirm
 if errorlevel 1 ( echo  [ERROR] PyInstaller build failed. & pause & exit /b 1 )
 
+:: Copy output to root directory for easy GitHub access
+copy /y dist\TaskbarPets.exe TaskbarPets.exe >nul
+
 echo.
 echo  ========================================
 echo   BUILD COMPLETE!
 echo  ========================================
 echo.
-echo   Your app:   dist\TaskbarPets.exe
-echo   Size:       (check dist\ folder)
+echo   Your app:   TaskbarPets.exe
+echo   Location:   Root directory & dist\TaskbarPets.exe
 echo.
-echo   Test it:    dist\TaskbarPets.exe
+echo   Test it:    TaskbarPets.exe
 echo.
 pause

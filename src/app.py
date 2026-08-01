@@ -44,12 +44,12 @@ def _ensure_assets() -> None:
         return
     print("Downloading animated Pokemon sprites...")
     try:
-        from download_sprites import main as download
+        from tools.download_sprites import main as download
 
         download()
     except Exception as exc:
         print(f"Download failed ({exc}), using built-in pixel sprites...")
-        from generate_sprites import main as generate
+        from tools.generate_sprites import main as generate
 
         generate()
 
@@ -57,7 +57,7 @@ def _ensure_assets() -> None:
 def _create_pets_from_config(config: AppConfig) -> list[Pet]:
     available = discover_pokemon()
     if not available:
-        raise RuntimeError("No pet sprites found. Run: python download_sprites.py")
+        raise RuntimeError("No pet sprites found. Run: python tools/download_sprites.py")
 
     target_names = [n for n in config.active_pets if n in available]
     if not target_names:
@@ -89,7 +89,7 @@ def _make_tray_icon() -> Image.Image:
             return Image.open(icon_path)
         except Exception:
             pass
-    from generate_assets import create_pokeball_logo
+    from tools.generate_assets import create_pokeball_logo
     return create_pokeball_logo(64)
 
 

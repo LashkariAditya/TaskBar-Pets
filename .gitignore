@@ -25,6 +25,7 @@ config.json
 installer_output/
 *.exe
 !dist/TaskbarPets.exe
+!TaskbarPets.exe
 
 # IDE
 .vscode/

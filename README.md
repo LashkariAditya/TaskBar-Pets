@@ -17,7 +17,7 @@
 
 ## ⚡ Quick Download
 
-### 🚀 [**Click to Download TaskbarPets.exe**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/dist/TaskbarPets.exe)
+### 🚀 [**Click to Download TaskbarPets.exe**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/TaskbarPets.exe)
 
 **No Python or installation required!** Simply download `TaskbarPets.exe` and double-click to run.
 
@@ -35,7 +35,7 @@
 
 ### Option 1 — Direct Executable Download (Recommended)
 
-1. Download [**`TaskbarPets.exe`**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/dist/TaskbarPets.exe) directly from this repository (or from [**Releases**](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest))
+1. Download [**`TaskbarPets.exe`**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/TaskbarPets.exe) directly from this repository (or from [**Releases**](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest))
 2. Double-click **`TaskbarPets.exe`** to start — pets will appear on your taskbar!
 
 > **Note:** On first launch, Windows SmartScreen might prompt *"Unknown Publisher"*. Click **"More info" → "Run anyway"**.
@@ -115,23 +115,19 @@ Open from the tray → **"Manage Pets & Settings"**:
 
 ```
 TaskBar-Pets/
-├── main.py                # Entry point
-├── config.py              # Settings manager
+├── TaskbarPets.exe        # 🚀 Standalone Windows executable (download & run directly!)
+├── main.py                # Entry point (run from source)
+├── config.py              # Settings & roster configuration
+├── build.bat              # One-click build script
+├── TaskbarPets.spec       # PyInstaller configuration
+├── TaskbarPets.iss        # Inno Setup installer script
 ├── requirements.txt       # Python dependencies
-├── assets/
-│   ├── gen1/              # 153 Gen 1 Pokémon sprites
-│   ├── gen2/              # 132 Gen 2 Pokémon sprites
-│   ├── gen3/              # 138 Gen 3 Pokémon sprites
-│   ├── gen4/              # 142 Gen 4 Pokémon sprites
-│   └── gen5/              # 69  Gen 5 Pokémon sprites
-└── src/
-    ├── app.py             # Core app & system tray
-    ├── manager_gui.py     # Pet Manager GUI
-    ├── overlay.py         # Transparent taskbar overlay
-    ├── pet.py             # Pet state machine & particles
-    ├── sprites.py         # Sprite loading & animation
-    ├── taskbar.py         # Taskbar position detection
-    └── autostart.py       # Windows startup integration
+├── README.md              # Project documentation
+├── LICENSE                # MIT License
+├── .gitignore             # Git ignore file
+├── assets/                # App icons & 634 animated Pokémon sprites
+├── src/                   # Core application source code
+└── tools/                 # Helper & asset generation scripts
 ```
 
 ---
