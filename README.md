@@ -14,20 +14,31 @@
 ---
 
 <div align="center">
+
+## ⚡ Quick Download
+
+### 🚀 [**Click to Download TaskbarPets.exe**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/dist/TaskbarPets.exe)
+
+**No Python or installation required!** Simply download `TaskbarPets.exe` and double-click to run.
+
+</div>
+
+---
+
+<div align="center">
   <img src="https://raw.githubusercontent.com/LashkariAditya/TaskBar-Pets/main/assets/preview.gif" alt="Taskbar Pets Preview" width="700"/>
 </div>
 
 ---
 
-## ⬇️ Download & Install
+## ⬇️ Download & Run Options
 
-### Option 1 — Standalone Exe (Recommended, No Python needed)
+### Option 1 — Direct Executable Download (Recommended)
 
-1. Go to [**Releases**](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest)
-2. Download **`TaskbarPets.exe`**
-3. Double-click to run — no installation needed!
+1. Download [**`TaskbarPets.exe`**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/dist/TaskbarPets.exe) directly from this repository (or from [**Releases**](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest))
+2. Double-click **`TaskbarPets.exe`** to start — pets will appear on your taskbar!
 
-> **Note:** Windows SmartScreen may show a warning on first run. Click **"More info" → "Run anyway"** — this is normal for unsigned apps.
+> **Note:** On first launch, Windows SmartScreen might prompt *"Unknown Publisher"*. Click **"More info" → "Run anyway"**.
 
 ### Option 2 — Run from Source
 
