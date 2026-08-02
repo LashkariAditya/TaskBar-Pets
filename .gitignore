@@ -16,6 +16,8 @@ ENV/
 # PyInstaller build artifacts
 build/
 dist/TaskbarPets.exe
+dist/TaskbarPets-content.zip
+dist/taskbarpets-release-manifest.json
 *.spec.bak
 
 # User config (personal settings, not for distribution)
