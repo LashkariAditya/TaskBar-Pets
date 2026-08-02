@@ -47,6 +47,16 @@ echo  [4/4] Building standalone .exe with PyInstaller...
 python -m PyInstaller TaskbarPets.spec --clean --noconfirm
 if errorlevel 1 ( echo  [ERROR] PyInstaller build failed. & pause & exit /b 1 )
 
+:: ── Build content pack for release ───────────────────────────────────────────
+echo  [5/5] Building content pack...
+python tools\build_content_pack.py
+if errorlevel 1 ( echo  [ERROR] Content pack build failed. & pause & exit /b 1 )
+
+:: ── Generate release manifest ────────────────────────────────────────────────
+echo  [6/6] Generating release manifest...
+python tools\generate_release_manifest.py
+if errorlevel 1 ( echo  [ERROR] Release manifest generation failed. & pause & exit /b 1 )
+
 :: Copy output to root directory for easy GitHub access
 copy /y dist\TaskbarPets.exe TaskbarPets.exe >nul
 
@@ -57,6 +67,8 @@ echo  ========================================
 echo.
 echo   Your app:   TaskbarPets.exe
 echo   Location:   Root directory & dist\TaskbarPets.exe
+echo   Content:    dist\TaskbarPets-content.zip
+echo   Manifest:   dist\taskbarpets-release-manifest.json
 echo.
 echo   Test it:    TaskbarPets.exe
 echo.

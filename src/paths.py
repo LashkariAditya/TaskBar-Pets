@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -22,8 +23,28 @@ def get_data_dir() -> Path:
     For source:         project root
     """
     if getattr(sys, "frozen", False):
-        import os
         data = Path(os.environ.get("APPDATA", Path.home())) / "TaskbarPets"
         data.mkdir(parents=True, exist_ok=True)
         return data
     return Path(__file__).resolve().parent.parent
+
+
+def get_assets_dir() -> Path:
+    """Return the writable overlay asset directory used for downloaded content."""
+    if getattr(sys, "frozen", False):
+        assets = get_data_dir() / "assets"
+        assets.mkdir(parents=True, exist_ok=True)
+        return assets
+    return Path(__file__).resolve().parent.parent / "assets"
+
+
+def get_asset_roots() -> list[Path]:
+    """Return asset search roots, with writable overlay first when bundled."""
+    roots: list[Path] = []
+    if getattr(sys, "frozen", False):
+        roots.append(get_assets_dir())
+        bundled = Path(sys._MEIPASS) / "assets"  # type: ignore[attr-defined]
+        roots.append(bundled)
+    else:
+        roots.append(get_assets_dir())
+    return roots

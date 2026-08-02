@@ -72,6 +72,23 @@ python main.py
 | 🔍 **Search & Filter** | Find any Pokémon instantly by name or generation |
 | 🔢 **Max 5 Pets** | Choose up to 5 companions from the manager |
 
+## 🔄 Updates
+
+Taskbar Pets checks GitHub Releases in the background.
+
+- New pet content is downloaded automatically when a release includes the content pack asset.
+- App updates are staged automatically on Windows and the app relaunches after the current process exits.
+- If the app cannot replace itself, it still notifies you in the tray so you can update from the release page.
+- Use **System Tray → Check for Updates** to force a manual check.
+
+## 🧩 Custom Asset Packs
+
+The repository now supports a special asset group under `assets/naruto/`.
+
+- Put a pet folder such as `assets/naruto/9tail/` in that path.
+- Add `walk.gif` / `idle.gif` or matching PNG frame sequences inside the folder.
+- The app will discover the pet automatically, and the release builder will include it in `TaskbarPets-content.zip`.
+
 ---
 
 ## 🖥️ System Requirements
@@ -88,6 +105,7 @@ python main.py
 ### System Tray
 Right-click the **Pokéball icon** in the system tray for quick controls:
 - **Manage Pets & Settings** — Open the full manager
+- **Check for Updates** — Force a background update check now
 - **Interactive Mode** — Toggle click-through / interactive
 - **Feed All Pets / Sleep All** — Quick actions
 - **Add Random Pokémon** — Surprise pet!
@@ -99,6 +117,7 @@ Open from the tray → **"Manage Pets & Settings"**:
 - Filter by **Gen 1 / Gen 2 / Gen 3 / Gen 4 / Gen 5**
 - Select up to **5 pets** for your active roster
 - Adjust size, speed, and behavior in the **Settings** tab
+- Use **Check for Updates** in the manager to trigger an immediate update check
 
 ### Interactive Mode Controls
 | Action | Result |
@@ -138,6 +157,8 @@ TaskBar-Pets/
 pip install pyinstaller pillow pystray
 python -m PyInstaller TaskbarPets.spec --noconfirm
 # Output: dist/TaskbarPets.exe
+# Output: dist/TaskbarPets-content.zip
+# Output: dist/taskbarpets-release-manifest.json
 ```
 
 ---

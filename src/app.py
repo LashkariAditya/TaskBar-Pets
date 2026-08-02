@@ -6,6 +6,7 @@ import ctypes
 import random
 import sys
 import threading
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -28,6 +29,14 @@ from PIL import Image, ImageDraw
 from config import AppConfig
 from src.manager_gui import PetManagerWindow
 from src.overlay import OverlayWindow
+from src.updater import (
+    check_for_updates,
+    download_app_update,
+    download_content_pack,
+    get_pinned_executable_path,
+    notify_update,
+    schedule_executable_update,
+)
 from src.pet import Pet
 from src.sprites import (
     discover_pokemon,
@@ -102,6 +111,9 @@ class TaskbarPetsApp:
         self.manager_gui: PetManagerWindow | None = None
         self._tray = None
         self._tray_thread: threading.Thread | None = None
+        self._update_thread: threading.Thread | None = None
+        self._tray_ready = threading.Event()
+        self._latest_release_url: str | None = None
 
     def _start_overlay(self) -> None:
         if self.overlay is not None:
@@ -134,7 +146,9 @@ class TaskbarPetsApp:
             def _show():
                 if self.manager_gui is None or not self.manager_gui.root.winfo_exists():
                     self.manager_gui = PetManagerWindow(
-                        self.config, on_save_callback=self._on_config_updated
+                        self.config,
+                        on_save_callback=self._on_config_updated,
+                        on_check_updates_callback=self._manual_check_for_updates,
                     )
 
             self.overlay.root.after(0, _show)
@@ -180,12 +194,69 @@ class TaskbarPetsApp:
         if self._tray:
             self._tray.stop()
 
+    def _manual_check_for_updates(self, _icon=None, _item=None) -> None:
+        self._start_update_check()
+
+    def _refresh_after_content_update(self) -> None:
+        self.pets = _create_pets_from_config(self.config)
+        if self.overlay:
+            self.overlay.update_pets(self.pets)
+
+    def _run_update_check(self) -> None:
+        self._tray_ready.wait(timeout=10)
+
+        status = check_for_updates()
+        if status.message:
+            return
+
+        if status.latest_release:
+            self._latest_release_url = status.latest_release.html_url
+
+        if status.latest_release and status.content_update_available:
+            updated_dir = download_content_pack(status.latest_release)
+            if updated_dir is not None:
+                notify_update(
+                    self._tray,
+                    "Taskbar Pets content updated",
+                    f"New pets and sprites are ready from {status.latest_release.version}.",
+                )
+                self._refresh_after_content_update()
+
+        if status.latest_release and status.app_update_available:
+            staged_exe = download_app_update(status.latest_release)
+            current_exe = get_pinned_executable_path()
+            if staged_exe is not None and current_exe is not None:
+                if schedule_executable_update(staged_exe, current_exe):
+                    notify_update(
+                        self._tray,
+                        "Taskbar Pets update ready",
+                        f"Version {status.latest_release.version} is downloading and will relaunch automatically.",
+                    )
+                    if self._tray:
+                        self._tray.stop()
+                    if self.overlay and self.overlay.root.winfo_exists():
+                        self.overlay.root.after(0, self.overlay.root.destroy)
+                    return
+
+            notify_update(
+                self._tray,
+                "Taskbar Pets update available",
+                f"Version {status.latest_release.version} is available on GitHub.",
+            )
+
+    def _start_update_check(self) -> None:
+        if self._update_thread and self._update_thread.is_alive():
+            return
+        self._update_thread = threading.Thread(target=self._run_update_check, daemon=True)
+        self._update_thread.start()
+
     def _run_tray(self) -> None:
         import pystray
 
         menu = pystray.Menu(
             pystray.MenuItem("🐾 Taskbar Pets", lambda _icon, _item: self._open_manager_gui(), default=True),
             pystray.MenuItem("⚙️ Manage Pets & Settings...", lambda _icon, _item: self._open_manager_gui()),
+            pystray.MenuItem("🔄 Check for Updates", self._manual_check_for_updates),
             pystray.Menu.SEPARATOR,
             pystray.MenuItem(
                 "🖱️ Interactive Mode",
@@ -204,11 +275,13 @@ class TaskbarPetsApp:
             "Taskbar Pets",
             menu,
         )
+        self._tray_ready.set()
         self._tray.run()
 
     def run(self) -> None:
         self._tray_thread = threading.Thread(target=self._run_tray, daemon=True)
         self._tray_thread.start()
+        self._start_update_check()
         self._start_overlay()
 
 

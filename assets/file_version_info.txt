@@ -3,8 +3,8 @@
 # PyInstaller Version Information File for Taskbar Pets
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=(1, 0, 0, 0),
-    prodvers=(1, 0, 0, 0),
+    filevers=(2, 0, 0, 0),
+    prodvers=(2, 0, 0, 0),
     mask=0x3f,
     flags=0x0,
     OS=0x40004,
@@ -20,12 +20,12 @@ VSVersionInfo(
           [
             StringStruct('CompanyName', 'Taskbar Pets'),
             StringStruct('FileDescription', 'Taskbar Pets Desktop Companions'),
-            StringStruct('FileVersion', '1.0.0.0'),
+            StringStruct('FileVersion', '2.0.0.0'),
             StringStruct('InternalName', 'TaskbarPets'),
             StringStruct('LegalCopyright', 'Copyright (c) 2026'),
             StringStruct('OriginalFilename', 'TaskbarPets.exe'),
             StringStruct('ProductName', 'Taskbar Pets'),
-            StringStruct('ProductVersion', '1.0.0.0')
+            StringStruct('ProductVersion', '2.0.0.0')
           ]
         )
       ]

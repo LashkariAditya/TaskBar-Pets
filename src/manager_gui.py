@@ -9,6 +9,7 @@ from typing import Callable
 from config import AppConfig
 from src.autostart import is_autostart_enabled, set_autostart
 from src.sprites import discover_pokemon
+from src.version import APP_VERSION
 
 # ── Pure Black Minimal Palette (Matching Screenshot Aesthetic) ───────────────
 BG       = "#000000"   # Pure black
@@ -104,9 +105,11 @@ class PetManagerWindow:
         self,
         config: AppConfig,
         on_save_callback: Callable[[AppConfig], None] | None = None,
+        on_check_updates_callback: Callable[[], None] | None = None,
     ):
         self.config = config
         self.on_save_callback = on_save_callback
+        self.on_check_updates_callback = on_check_updates_callback
 
         self.root = tk.Toplevel()
         self.root.title("Taskbar Pets")
@@ -153,7 +156,7 @@ class PetManagerWindow:
                  bg=BG, fg=SUBTEXT).pack(anchor="w", pady=2)
 
         # Version badge
-        tk.Label(header, text="v2.0",
+        tk.Label(header, text=f"v{APP_VERSION}",
                  font=("Segoe UI", 9),
                  bg=SURFACE2, fg=SUBTEXT,
                  padx=8, pady=4).pack(side="right", anchor="n")
@@ -165,6 +168,24 @@ class PetManagerWindow:
         bar.pack(fill="x", side="bottom")
 
         _divider(self.root)
+
+        update_btn = tk.Label(
+            bar,
+            text="Check for Updates",
+            font=("Segoe UI", 10),
+            bg=BG,
+            fg=TEXT,
+            cursor="hand2",
+            padx=16,
+            pady=8,
+        )
+        update_btn.pack(side="left")
+        if self.on_check_updates_callback:
+            update_btn.bind("<Button-1>", lambda _: self.on_check_updates_callback())
+            update_btn.bind("<Enter>", lambda _: update_btn.configure(fg=SUBTEXT))
+            update_btn.bind("<Leave>", lambda _: update_btn.configure(fg=TEXT))
+        else:
+            update_btn.configure(fg=SUBTEXT, cursor="arrow")
 
         cancel_btn = tk.Label(bar, text="Cancel",
                               font=("Segoe UI", 10), bg=BG, fg=SUBTEXT,
@@ -266,6 +287,7 @@ class PetManagerWindow:
         all_gen_options = [
             ("All", "all"), ("Gen 1", "gen1"), ("Gen 2", "gen2"),
             ("Gen 3", "gen3"), ("Gen 4", "gen4"), ("Gen 5", "gen5"),
+            ("Naruto", "naruto"),
         ]
 
         for label_text, gen_code in all_gen_options:

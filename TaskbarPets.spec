@@ -10,7 +10,7 @@ ROOT = Path(SPEC).parent  # directory containing this .spec file
 # ── Collect all pokemon sprite folders ────────────────────────────────────────
 pokemon_datas = []
 assets_dir = ROOT / "assets"
-for gen in ["gen1", "gen2", "gen3", "gen4", "gen5", "pokemon"]:
+for gen in ["gen1", "gen2", "gen3", "gen4", "gen5", "naruto", "pokemon"]:
     gen_dir = assets_dir / gen
     if gen_dir.exists():
         for pokemon_folder in gen_dir.iterdir():

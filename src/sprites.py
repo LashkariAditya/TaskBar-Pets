@@ -7,47 +7,50 @@ from pathlib import Path
 
 from PIL import Image, ImageTk
 
-from src.paths import get_app_dir
+from src.paths import get_asset_roots, get_assets_dir
 
 DEFAULT_FRAME_MS = 80
 DISPLAY_SCALE = 2  # upscale Gen V sprites for taskbar visibility
 MIN_UPSCALE = 64
 
 GEN_KEYS = ["gen1", "gen2", "gen3", "gen4", "gen5"]
+SPECIAL_KEYS = ["naruto"]
+ASSET_GROUPS = GEN_KEYS + SPECIAL_KEYS + ["pokemon"]
 GEN_LABELS = {
     "gen1": "Generation 1 (Kanto)",
     "gen2": "Generation 2 (Johto)",
     "gen3": "Generation 3 (Hoenn)",
     "gen4": "Generation 4 (Sinnoh)",
     "gen5": "Generation 5 (Unova)",
+    "naruto": "Naruto / Special",
     "all": "All Generations",
 }
 
 
 def get_pokemon_folder(pokemon_name: str) -> Path | None:
-    """Find the asset directory for a pokemon name across gen1..gen5 and pokemon."""
-    base_dir = get_app_dir() / "assets"
-    for gen in ["gen1", "gen2", "gen3", "gen4", "gen5", "pokemon"]:
-        folder = base_dir / gen / pokemon_name
-        if folder.is_dir():
-            return folder
+    """Find the asset directory for a pet name across all supported asset groups."""
+    for base_dir in get_asset_roots():
+        for group in ASSET_GROUPS:
+            folder = base_dir / group / pokemon_name
+            if folder.is_dir():
+                return folder
     return None
 
 
 def discover_pokemon_by_gen() -> dict[str, list[str]]:
     """Return dictionary mapping gen key ('gen1'..'gen5') to sorted list of pokemon names."""
     result: dict[str, list[str]] = {}
-    base_dir = get_app_dir() / "assets"
 
-    for gen in GEN_KEYS:
-        gen_dir = base_dir / gen
+    for gen in GEN_KEYS + SPECIAL_KEYS:
         names: list[str] = []
-        if gen_dir.is_dir():
-            for folder in sorted(gen_dir.iterdir()):
-                if folder.is_dir():
-                    gifs = list(folder.glob("*.gif")) + list(folder.glob("*.png"))
-                    if gifs:
-                        names.append(folder.name)
+        for base_dir in get_asset_roots():
+            gen_dir = base_dir / gen
+            if gen_dir.is_dir():
+                for folder in sorted(gen_dir.iterdir()):
+                    if folder.is_dir():
+                        gifs = list(folder.glob("*.gif")) + list(folder.glob("*.png"))
+                        if gifs and folder.name not in names:
+                            names.append(folder.name)
         result[gen] = names
     return result
 
@@ -60,11 +63,13 @@ def discover_pokemon() -> list[str]:
         all_names.update(gen_list)
 
     if not all_names:
-        pokemon_dir = get_app_dir() / "assets" / "pokemon"
-        if pokemon_dir.is_dir():
-            for folder in sorted(pokemon_dir.iterdir()):
-                if folder.is_dir():
-                    all_names.add(folder.name)
+        for base_dir in get_asset_roots():
+            for group in ASSET_GROUPS:
+                pokemon_dir = base_dir / group
+                if pokemon_dir.is_dir():
+                    for folder in sorted(pokemon_dir.iterdir()):
+                        if folder.is_dir():
+                            all_names.add(folder.name)
 
     return sorted(all_names)
 

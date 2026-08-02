@@ -5,7 +5,7 @@
 ; ─────────────────────────────────────────────────────────────────────────────
 
 #define AppName      "Taskbar Pets"
-#define AppVersion   "1.0.0"
+#define AppVersion   "2.0.0"
 #define AppPublisher "Your Name"
 #define AppURL       "https://github.com/yourname/taskbar-pets"
 #define AppExeName   "TaskbarPets.exe"
