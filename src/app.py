@@ -206,7 +206,14 @@ class TaskbarPetsApp:
         self._tray_ready.wait(timeout=10)
 
         status = check_for_updates()
-        if status.message:
+
+        # If we can't reach GitHub at all, show a tray notification and bail
+        if status.latest_release is None:
+            notify_update(
+                self._tray,
+                "Taskbar Pets",
+                "Could not check for updates — check your internet connection.",
+            )
             return
 
         if status.latest_release:
@@ -217,10 +224,16 @@ class TaskbarPetsApp:
             if updated_dir is not None:
                 notify_update(
                     self._tray,
-                    "Taskbar Pets content updated",
-                    f"New pets and sprites are ready from {status.latest_release.version}.",
+                    "New pets available! 🐾",
+                    f"New pets downloaded from {status.latest_release.version}. Open 'Manage Pets' to find them.",
                 )
                 self._refresh_after_content_update()
+            else:
+                notify_update(
+                    self._tray,
+                    "Taskbar Pets",
+                    "Content update found but download failed. Check your connection.",
+                )
 
         if status.latest_release and status.app_update_available:
             staged_exe = download_app_update(status.latest_release)
@@ -230,7 +243,7 @@ class TaskbarPetsApp:
                     notify_update(
                         self._tray,
                         "Taskbar Pets update ready",
-                        f"Version {status.latest_release.version} is downloading and will relaunch automatically.",
+                        f"Version {status.latest_release.version} will relaunch automatically.",
                     )
                     if self._tray:
                         self._tray.stop()
@@ -243,6 +256,14 @@ class TaskbarPetsApp:
                 "Taskbar Pets update available",
                 f"Version {status.latest_release.version} is available on GitHub.",
             )
+
+        if not status.content_update_available and not status.app_update_available:
+            notify_update(
+                self._tray,
+                "Taskbar Pets",
+                "You're up to date!",
+            )
+
 
     def _start_update_check(self) -> None:
         if self._update_thread and self._update_thread.is_alive():
