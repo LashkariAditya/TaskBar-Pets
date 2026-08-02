@@ -2,12 +2,13 @@
 
 <div align="center">
 
-**Animated Pokémon companions that walk, idle, and play on your Windows Taskbar!**
+**Animated Pokémon & custom companions that walk, idle, and play on your Windows Taskbar!**
 
+[![Version](https://img.shields.io/badge/Version-2.0.1-brightgreen)](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest)
 [![Windows](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue?logo=windows)](https://github.com/LashkariAditya/TaskBar-Pets)
 [![Python](https://img.shields.io/badge/Python-3.10+-green?logo=python)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
-[![Pokémon](https://img.shields.io/badge/Pok%C3%A9mon-Gen%201--5-red)](https://github.com/LashkariAditya/TaskBar-Pets)
+[![Pets](https://img.shields.io/badge/Pets-661%2B-orange)](https://github.com/LashkariAditya/TaskBar-Pets)
 
 </div>
 
@@ -25,108 +26,109 @@
 
 ---
 
-<div align="center">
-  <img src="https://raw.githubusercontent.com/LashkariAditya/TaskBar-Pets/main/assets/preview.gif" alt="Taskbar Pets Preview" width="700"/>
-</div>
-
----
-
-## ⬇️ Download & Run Options
-
-### Option 1 — Direct Executable Download (Recommended)
-
-1. Download [**`TaskbarPets.exe`**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/TaskbarPets.exe) directly from this repository (or from [**Releases**](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest))
-2. Double-click **`TaskbarPets.exe`** to start — pets will appear on your taskbar!
-
-> **Note:** On first launch, Windows SmartScreen might prompt *"Unknown Publisher"*. Click **"More info" → "Run anyway"**.
-
-### Option 2 — Run from Source
-
-```bash
-# Clone the repo
-git clone https://github.com/LashkariAditya/TaskBar-Pets.git
-cd TaskBar-Pets
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Launch!
-python main.py
-```
-
----
-
 ## ✨ Features
 
 | Feature | Description |
 |---|---|
-| 🐾 **634 Pokémon** | All Gen 1–5 Pokémon with authentic animated sprites |
-| 🚶 **Walk & Idle** | Pets walk left/right, pause, and show front-facing idle model at turns |
-| 🎮 **Interactive Mode** | Click to pet, double-click to feed, right-click for context menu |
-| 💬 **Speech Bubbles** | Species-specific dialogue — *"Pika Pika!"*, *"Char!"*, *"Zzz..."* |
-| ✨ **Particle Effects** | Hearts when petted, Zzz bubbles while sleeping |
+| 🐾 **661+ Companions** | Gen 1–5 Pokémon (634) + special characters (9tail / Kurama and more) |
+| 🚶 **Walk & Idle** | Pets walk left/right across the taskbar, pause, and flip at screen edges |
+| ✨ **Shiny Variants** | Many Pokémon have alternate shiny colour palettes |
+| 🎮 **Interactive Mode** | Click to pet, double-click to feed, right-click for per-pet menu |
+| 💬 **Speech Bubbles** | Species-specific dialogue — *"Pika Pika!"*, *"Char!"*, *"Zzz…"* |
+| 💫 **Particle Effects** | Hearts when petted, Zzz bubbles while sleeping |
 | 📌 **Pin Anywhere** | Drag & pin pets at any screen position |
-| 🔽 **Auto-hide Support** | Pets fall when taskbar hides, rise when it appears |
-| 🧊 **Freeze Mode** | Keep pets stationary above clock |
-| 🚀 **Startup Launch** | Option to start silently with Windows |
-| 🔍 **Search & Filter** | Find any Pokémon instantly by name or generation |
-| 🔢 **Max 5 Pets** | Choose up to 5 companions from the manager |
-
-## 🔄 Updates
-
-Taskbar Pets checks GitHub Releases in the background.
-
-- New pet content is downloaded automatically when a release includes the content pack asset.
-- App updates are staged automatically on Windows and the app relaunches after the current process exits.
-- If the app cannot replace itself, it still notifies you in the tray so you can update from the release page.
-- Use **System Tray → Check for Updates** to force a manual check.
-
-## 🧩 Custom Asset Packs
-
-The repository now supports a special asset group under `assets/naruto/`.
-
-- Put a pet folder such as `assets/naruto/9tail/` in that path.
-- Add `walk.gif` / `idle.gif` or matching PNG frame sequences inside the folder.
-- The app will discover the pet automatically, and the release builder will include it in `TaskbarPets-content.zip`.
+| 🔽 **Auto-hide Support** | Pets fall when taskbar hides, rise when it reappears |
+| 🧊 **Freeze Mode** | Keep pets stationary above the clock |
+| 🚀 **Startup Launch** | Start silently with Windows |
+| 🔍 **Search & Filter** | Find any companion instantly by name or generation |
+| 🐉 **Custom Pets** | Drop sprite GIFs into `assets/naruto/<name>/` to add your own characters |
+| 🔢 **Up to 5 Pets** | Choose up to 5 active companions from the manager |
+| 🔄 **Auto-Updates** | New pets and app updates delivered automatically via GitHub Releases |
 
 ---
 
-## 🖥️ System Requirements
+## ⬇️ Download & Run
 
-- **OS**: Windows 10 or Windows 11
-- **CPU**: Any modern processor
-- **RAM**: ~50 MB
-- **Python**: 3.10+ *(only if running from source)*
+### Option 1 — Direct Executable (Recommended)
+
+1. Download [**`TaskbarPets.exe`**](https://github.com/LashkariAditya/TaskBar-Pets/raw/main/TaskbarPets.exe) directly from this repo  
+   or grab the [**latest release**](https://github.com/LashkariAditya/TaskBar-Pets/releases/latest)
+2. Double-click **`TaskbarPets.exe`** — pets appear on your taskbar immediately
+
+> **Note:** Windows SmartScreen may show *"Unknown Publisher"* on first launch. Click **More info → Run anyway**.
+
+### Option 2 — Run from Source
+
+```bash
+# Clone
+git clone https://github.com/LashkariAditya/TaskBar-Pets.git
+cd TaskBar-Pets
+
+# Install dependencies (Pillow + pystray only)
+pip install -r requirements.txt
+
+# Launch
+python main.py
+```
 
 ---
 
 ## 🎮 How to Use
 
 ### System Tray
-Right-click the **Pokéball icon** in the system tray for quick controls:
-- **Manage Pets & Settings** — Open the full manager
-- **Check for Updates** — Force a background update check now
-- **Interactive Mode** — Toggle click-through / interactive
-- **Feed All Pets / Sleep All** — Quick actions
-- **Add Random Pokémon** — Surprise pet!
-- **Quit**
+Right-click the **Pokéball icon** in the system tray:
+
+| Menu Item | Action |
+|---|---|
+| ⚙️ Manage Pets & Settings | Open the full manager window |
+| 🔄 Check for Updates | Force an immediate update check |
+| 🖱️ Interactive Mode | Toggle click-through / interactive |
+| 🍇 Feed All Pets | Feed every active pet |
+| 💤 Sleep / Wake All | Toggle sleep state for all pets |
+| ➕ Add Random Pokémon | Surprise pet! |
+| ❌ Quit | Exit the app |
 
 ### Pet Manager
 Open from the tray → **"Manage Pets & Settings"**:
-- Search any of the 634 Pokémon by name
-- Filter by **Gen 1 / Gen 2 / Gen 3 / Gen 4 / Gen 5**
-- Select up to **5 pets** for your active roster
-- Adjust size, speed, and behavior in the **Settings** tab
-- Use **Check for Updates** in the manager to trigger an immediate update check
+- Browse and search all **661+ companions** by name
+- Filter by **Gen 1 / Gen 2 / Gen 3 / Gen 4 / Gen 5 / Naruto & Special**
+- Select up to **5 active pets**
+- Adjust **Pet Size**, **Walk Speed**, and **Taskbar Offset** in the Settings tab
 
 ### Interactive Mode Controls
 | Action | Result |
 |---|---|
 | Left Click | Pet & show hearts ♥️ |
 | Double Click | Feed a berry 🍇 |
-| Right Click | Open pet menu |
+| Right Click | Open pet context menu |
 | Drag | Move pet anywhere on screen |
 | Right-click → Pin | Lock pet position |
+
+---
+
+## 🔄 Updates
+
+Taskbar Pets checks **GitHub Releases** in the background on startup and whenever you click **Check for Updates**.
+
+- **Content updates** (new pets, sprites) are downloaded automatically to `%APPDATA%\TaskbarPets\assets\`
+- **App updates** (new `.exe`) are staged and applied automatically on next launch
+- A **tray notification** fires for every result — including "You're up to date!"
+
+---
+
+## 🐉 Custom Asset Packs (Add Your Own Pets)
+
+Any folder under `assets/naruto/<pet-name>/` is automatically discovered by the app.
+
+### Steps to add a new pet:
+1. Create a folder: `assets/naruto/<your-pet-name>/`
+2. Drop sprite files inside:
+   - `default_walk_8fps.gif` — walk animation (or `walk.gif`)
+   - `default_idle_8fps.gif` — idle animation (or `idle.gif`)
+   - Optional: PNG frame sequences named `walk_0.png`, `walk_1.png`, … and `idle_0.png`, `idle_1.png`, …
+3. The app discovers the pet automatically — no code changes needed
+
+> **Example:** `assets/naruto/9tail/` contains Kurama (Nine-Tailed Fox) sprites generated by `tools/generate_9tail_sprites.py`.
 
 ---
 
@@ -134,31 +136,155 @@ Open from the tray → **"Manage Pets & Settings"**:
 
 ```
 TaskBar-Pets/
-├── TaskbarPets.exe        # 🚀 Standalone Windows executable (download & run directly!)
-├── main.py                # Entry point (run from source)
-├── config.py              # Settings & roster configuration
-├── build.bat              # One-click build script
-├── TaskbarPets.spec       # PyInstaller configuration
-├── TaskbarPets.iss        # Inno Setup installer script
-├── requirements.txt       # Python dependencies
-├── README.md              # Project documentation
-├── LICENSE                # MIT License
-├── .gitignore             # Git ignore file
-├── assets/                # App icons & 634 animated Pokémon sprites
-├── src/                   # Core application source code
-└── tools/                 # Helper & asset generation scripts
+│
+├── TaskbarPets.exe             # Standalone Windows executable (download & run!)
+├── main.py                     # Entry point for running from source
+├── config.py                   # AppConfig dataclass + JSON persistence
+├── requirements.txt            # Runtime deps: Pillow>=10.0, pystray>=0.19
+├── build.bat                   # One-click PyInstaller build script
+├── TaskbarPets.spec            # PyInstaller bundle configuration
+├── TaskbarPets.iss             # Inno Setup installer script
+├── README.md
+├── LICENSE
+├── .gitignore
+│
+├── assets/                     # All sprite assets & app icons
+│   ├── icon.ico                # App icon (Windows .ico)
+│   ├── icon.png                # App icon (PNG)
+│   ├── installer_banner.bmp    # Inno Setup wizard banner
+│   ├── installer_icon.bmp      # Inno Setup small image
+│   ├── file_version_info.txt   # Windows version metadata for PyInstaller
+│   │
+│   ├── icon/                   # UI icon SVGs (add/remove/random buttons)
+│   │   ├── dark-add.svg
+│   │   ├── dark-trash.svg
+│   │   ├── dark-random.svg
+│   │   └── light-*.svg
+│   │
+│   ├── backgrounds/            # Background scene packs (unused/future use)
+│   │   ├── beach/
+│   │   ├── castle/
+│   │   └── forest/
+│   │
+│   ├── gen1/                   # 153 Kanto Pokémon sprites
+│   │   └── <name>/
+│   │       ├── default_walk_8fps.gif
+│   │       ├── default_idle_8fps.gif
+│   │       ├── shiny_walk_8fps.gif     # (where available)
+│   │       └── shiny_idle_8fps.gif
+│   │
+│   ├── gen2/                   # 132 Johto Pokémon sprites
+│   ├── gen3/                   # 138 Hoenn Pokémon sprites
+│   ├── gen4/                   # 142 Sinnoh Pokémon sprites
+│   ├── gen5/                   # 69 Unova Pokémon sprites
+│   │
+│   ├── naruto/                 # Naruto & custom character sprites
+│   │   └── 9tail/              # Kurama (Nine-Tailed Fox)
+│   │       ├── default_walk_8fps.gif
+│   │       ├── default_idle_8fps.gif
+│   │       ├── walk.gif
+│   │       ├── idle.gif
+│   │       └── walk_0..3.png / idle_0..3.png
+│   │
+│   └── pokemon/                # 26 legacy animated Gen V sprites (PokeAPI)
+│       └── <name>/
+│           ├── animated.gif
+│           └── frame_XX.png
+│
+├── src/                        # Core application source
+│   ├── app.py                  # Main app controller (tray, overlay, update loop)
+│   ├── manager_gui.py          # Tkinter Pet Manager & Settings UI
+│   ├── overlay.py              # Transparent taskbar overlay window
+│   ├── pet.py                  # Pet state machine (walk, idle, sleep, feed)
+│   ├── sprites.py              # GIF/PNG sprite loader & discovery
+│   ├── updater.py              # GitHub Releases update checker & downloader
+│   ├── paths.py                # Path resolution (source vs PyInstaller bundle)
+│   ├── taskbar.py              # Win32 taskbar geometry detection
+│   ├── autostart.py            # Windows startup registry helper
+│   ├── win32_helpers.py        # Low-level Win32 API wrappers
+│   ├── version.py              # APP_VERSION, repo constants
+│   └── __init__.py
+│
+└── tools/                      # Developer & release scripts
+    ├── generate_9tail_sprites.py   # Generate pixel-art 9tail (Kurama) GIF sprites
+    ├── generate_sprites.py         # Generate built-in pixel-art Pokémon sprites
+    ├── generate_assets.py          # Generate app icon & installer banner images
+    ├── download_sprites.py         # Download Gen V animated sprites from PokeAPI
+    ├── build_content_pack.py       # Package assets/ into TaskbarPets-content.zip
+    ├── generate_release_manifest.py # Generate taskbarpets-release-manifest.json
+    ├── create_github_release.py    # Create a new GitHub Release with assets
+    └── update_release_manifest.py  # Re-upload manifest to an existing release
 ```
 
 ---
 
-## 🔧 Build from Source (Create your own exe)
+## 🧩 Pet Asset Groups
+
+| Group | Location | Count | Notes |
+|---|---|---|---|
+| Generation 1 (Kanto) | `assets/gen1/` | 153 | Includes shiny variants |
+| Generation 2 (Johto) | `assets/gen2/` | 132 | Includes shiny variants |
+| Generation 3 (Hoenn) | `assets/gen3/` | 138 | Includes shiny variants |
+| Generation 4 (Sinnoh) | `assets/gen4/` | 142 | Includes shiny variants |
+| Generation 5 (Unova) | `assets/gen5/` | 69 | Includes shiny variants |
+| Naruto / Special | `assets/naruto/` | 1 | 9tail (Kurama) — expandable |
+| Legacy Animated | `assets/pokemon/` | 26 | Gen V Black/White style from PokeAPI |
+| **Total** | | **661+** | |
+
+---
+
+## 🖥️ System Requirements
+
+| Requirement | Details |
+|---|---|
+| OS | Windows 10 or Windows 11 |
+| CPU | Any modern processor |
+| RAM | ~50 MB |
+| Python | 3.10+ *(source only — not needed for .exe)* |
+
+---
+
+## 🔧 Build from Source
 
 ```bash
+# Install build tools
 pip install pyinstaller pillow pystray
-python -m PyInstaller TaskbarPets.spec --noconfirm
-# Output: dist/TaskbarPets.exe
-# Output: dist/TaskbarPets-content.zip
-# Output: dist/taskbarpets-release-manifest.json
+
+# Build the standalone .exe
+build.bat
+
+# Outputs:
+#   dist/TaskbarPets.exe
+#   dist/TaskbarPets-content.zip
+#   dist/taskbarpets-release-manifest.json
+```
+
+### Creating a New Release
+
+```bash
+# 1. Bump APP_VERSION in src/version.py
+
+# 2. Regenerate manifest
+python tools/generate_release_manifest.py
+
+# 3. Build content pack
+python tools/build_content_pack.py
+
+# 4. Create GitHub Release and upload assets
+python tools/create_github_release.py
+
+# Users will be notified automatically on next "Check for Updates"
+```
+
+### Adding a Custom Pet
+
+```bash
+# Generate sprites programmatically (see generate_9tail_sprites.py as a template)
+python tools/generate_9tail_sprites.py
+
+# Or just drop your own GIF files into:
+#   assets/naruto/<your-pet-name>/default_walk_8fps.gif
+#   assets/naruto/<your-pet-name>/default_idle_8fps.gif
 ```
 
 ---
@@ -171,9 +297,9 @@ MIT License — free to use, modify, and distribute.
 
 ## 🙏 Credits
 
-- Pokémon sprites sourced from community sprite archives
+- Pokémon sprites sourced from community sprite archives & [PokeAPI](https://pokeapi.co/docs/v2#sprites)
 - Inspired by [vscode-pets](https://github.com/tonybaloney/vscode-pets) by [@tonybaloney](https://github.com/tonybaloney)
-- Built with Python, Tkinter, Pillow, and pystray
+- Built with Python, Tkinter, [Pillow](https://python-pillow.org/), and [pystray](https://github.com/moses-palmer/pystray)
 
 ---
 
