@@ -219,11 +219,13 @@ def download_app_update(release: ReleaseInfo) -> Path | None:
         request = urllib.request.Request(asset.download_url, headers={"User-Agent": "Taskbar-Pets/2.0"})
         with urllib.request.urlopen(request, timeout=120) as response, open(temp_file, "wb") as handle:
             shutil.copyfileobj(response, handle)
+        staged_path.unlink(missing_ok=True)
         shutil.move(str(temp_file), staged_path)
         app_version = manifest.app_version if manifest else release.version
         (updates_dir / "app_version.txt").write_text(app_version, encoding="utf-8")
         return staged_path
-    except Exception:
+    except Exception as exc:
+        print(f"Error downloading app update: {exc}")
         return None
     finally:
         try:
@@ -255,15 +257,27 @@ param(
     [string]$LaunchExe
 )
 
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'SilentlyContinue'
 
-while (Get-Process -Id [int]$CurrentPid -ErrorAction SilentlyContinue) {{
+$attempts = 0
+while ((Get-Process -Id [int]$CurrentPid -ErrorAction SilentlyContinue) -and ($attempts -lt 25)) {{
     Start-Sleep -Milliseconds 400
+    $attempts++
 }}
 
-Copy-Item -LiteralPath $SourceExe -Destination $TargetExe -Force
+$copied = $false
+for ($i = 0; $i -lt 10; $i++) {{
+    try {{
+        Copy-Item -LiteralPath $SourceExe -Destination $TargetExe -Force -ErrorAction Stop
+        $copied = $true
+        break
+    }} catch {{
+        Start-Sleep -Milliseconds 500
+    }}
+}}
+
 if ($LaunchExe -and (Test-Path -LiteralPath $LaunchExe)) {{
-    Start-Process -FilePath $LaunchExe -WindowStyle Hidden
+    Start-Process -FilePath $LaunchExe
 }}
 """.strip(),
         encoding="utf-8",
@@ -290,7 +304,8 @@ if ($LaunchExe -and (Test-Path -LiteralPath $LaunchExe)) {{
     try:
         subprocess.Popen(command, creationflags=0x08000000)
         return True
-    except Exception:
+    except Exception as exc:
+        print(f"Failed to launch update script: {exc}")
         return False
 
 

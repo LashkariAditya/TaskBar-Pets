@@ -195,25 +195,29 @@ class TaskbarPetsApp:
             self._tray.stop()
 
     def _manual_check_for_updates(self, _icon=None, _item=None) -> None:
-        self._start_update_check()
+        self._start_update_check(manual=True)
 
     def _refresh_after_content_update(self) -> None:
         self.pets = _create_pets_from_config(self.config)
         if self.overlay:
             self.overlay.update_pets(self.pets)
 
-    def _run_update_check(self) -> None:
+    def _run_update_check(self, manual: bool = False) -> None:
+        import webbrowser
+        from src.version import APP_VERSION
+
         self._tray_ready.wait(timeout=10)
 
         status = check_for_updates()
 
         # If we can't reach GitHub at all, show a tray notification and bail
         if status.latest_release is None:
-            notify_update(
-                self._tray,
-                "Taskbar Pets",
-                "Could not check for updates — check your internet connection.",
-            )
+            if manual:
+                notify_update(
+                    self._tray,
+                    "Taskbar Pets",
+                    "Could not check for updates — check your internet connection.",
+                )
             return
 
         if status.latest_release:
@@ -228,7 +232,7 @@ class TaskbarPetsApp:
                     f"New pets downloaded from {status.latest_release.version}. Open 'Manage Pets' to find them.",
                 )
                 self._refresh_after_content_update()
-            else:
+            elif manual:
                 notify_update(
                     self._tray,
                     "Taskbar Pets",
@@ -254,21 +258,24 @@ class TaskbarPetsApp:
             notify_update(
                 self._tray,
                 "Taskbar Pets update available",
-                f"Version {status.latest_release.version} is available on GitHub.",
+                f"Version {status.latest_release.version} is available on GitHub. Opening release page...",
             )
+            if manual or self._latest_release_url:
+                webbrowser.open(self._latest_release_url or status.latest_release.html_url)
 
-        if not status.content_update_available and not status.app_update_available:
+        if manual and not status.content_update_available and not status.app_update_available:
             notify_update(
                 self._tray,
                 "Taskbar Pets",
-                "You're up to date!",
+                f"You're up to date! (v{APP_VERSION})",
             )
 
-
-    def _start_update_check(self) -> None:
+    def _start_update_check(self, manual: bool = False) -> None:
         if self._update_thread and self._update_thread.is_alive():
             return
-        self._update_thread = threading.Thread(target=self._run_update_check, daemon=True)
+        self._update_thread = threading.Thread(
+            target=self._run_update_check, args=(manual,), daemon=True
+        )
         self._update_thread.start()
 
     def _run_tray(self) -> None:

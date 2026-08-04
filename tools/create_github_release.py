@@ -37,6 +37,7 @@ RELEASE_BODY = (
 
 API_BASE = f"https://api.github.com/repos/{OWNER}/{REPO}"
 ASSETS = [
+    ROOT / "dist" / "TaskbarPets.exe",
     ROOT / "dist" / "TaskbarPets-content.zip",
     ROOT / "dist" / "taskbarpets-release-manifest.json",
 ]
@@ -79,7 +80,8 @@ def _api(method: str, path: str, body: dict | None = None, token: str = "") -> d
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
     with urllib.request.urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode())
+        raw = resp.read().decode()
+        return json.loads(raw) if raw else {}
 
 
 def _upload_asset(upload_url: str, path: Path, token: str) -> dict:
