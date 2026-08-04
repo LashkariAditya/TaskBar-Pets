@@ -1,6 +1,6 @@
 """
-Re-upload the release manifest to the existing v2.0.1 GitHub Release with updated version.
-This replaces the old manifest (2.0.0) with the new one (2.0.1) so users get notified.
+Re-upload the release manifest to the existing v2.1.0 GitHub Release with updated version.
+This replaces the old manifest (2.0.1) with the new one (2.1.0) so users get notified.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 OWNER = "LashkariAditya"
 REPO  = "TaskBar-Pets"
-TAG   = "v2.0.1"
+TAG   = "v2.1.0"
 
 API_BASE = f"https://api.github.com/repos/{OWNER}/{REPO}"
 
@@ -100,7 +100,7 @@ def main() -> None:
     result = _upload_asset(upload_url, manifest_path, token, "application/json")
     print(f"  OK: {result.get('browser_download_url')}")
 
-    print("\nDone! Release manifest updated to v2.0.1")
+    print("\nDone! Release manifest updated to v2.1.0")
     print("Users clicking 'Check for Updates' will now receive a notification and content download.")
 
 

@@ -14,7 +14,7 @@ DISPLAY_SCALE = 2  # upscale Gen V sprites for taskbar visibility
 MIN_UPSCALE = 64
 
 GEN_KEYS = ["gen1", "gen2", "gen3", "gen4", "gen5"]
-SPECIAL_KEYS = ["naruto"]
+SPECIAL_KEYS = ["naruto", "mod"]
 ASSET_GROUPS = GEN_KEYS + SPECIAL_KEYS + ["pokemon"]
 GEN_LABELS = {
     "gen1": "Generation 1 (Kanto)",
@@ -23,6 +23,7 @@ GEN_LABELS = {
     "gen4": "Generation 4 (Sinnoh)",
     "gen5": "Generation 5 (Unova)",
     "naruto": "Naruto / Special",
+    "mod": "Mod / Custom Pets",
     "all": "All Generations",
 }
 

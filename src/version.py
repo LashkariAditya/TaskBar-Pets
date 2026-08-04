@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 APP_NAME = "Taskbar Pets"
-APP_VERSION = "2.0.1"
-APP_VERSION_WIN = "2,0,1,0"
+APP_VERSION = "2.1.0"
+APP_VERSION_WIN = "2,1,0,0"
 REPOSITORY_OWNER = "LashkariAditya"
 REPOSITORY_NAME = "TaskBar-Pets"
 GITHUB_RELEASES_API = (

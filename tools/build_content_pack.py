@@ -15,7 +15,7 @@ from src.version import CONTENT_ASSET_NAME
 
 def _iter_asset_files() -> list[Path]:
     asset_root = ROOT / "assets"
-    groups = ["gen1", "gen2", "gen3", "gen4", "gen5", "naruto", "pokemon"]
+    groups = ["gen1", "gen2", "gen3", "gen4", "gen5", "naruto", "mod", "pokemon"]
     files: list[Path] = []
     for group in groups:
         group_dir = asset_root / group

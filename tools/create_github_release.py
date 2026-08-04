@@ -1,5 +1,5 @@
 """
-Create a GitHub Release v2.0.1 with content pack and manifest assets.
+Create a GitHub Release v2.1.0 with content pack and manifest assets.
 Uses the Windows Credential Manager token already stored from git pushes.
 """
 from __future__ import annotations
@@ -17,17 +17,20 @@ ROOT = Path(__file__).resolve().parent.parent
 
 OWNER = "LashkariAditya"
 REPO  = "TaskBar-Pets"
-TAG   = "v2.0.1"
-RELEASE_NAME = "v2.0.1 — 9tail (Nine-Tailed Fox) Content Update"
+TAG   = "v2.1.0"
+RELEASE_NAME = "v2.1.0 — 22 New Custom Pets (Mod Pack)"
 RELEASE_BODY = (
-    "## 🦊 New Pet: 9tail (Nine-Tailed Fox / Kurama)\n\n"
-    "This content release adds the **9tail** animated pet from the Naruto universe:\n\n"
-    "- 🐾 4-frame walk animation (orange pixel-art Nine-Tailed Fox)\n"
-    "- 😴 4-frame idle animation with breathing & flame pulse\n"
-    "- Discoverable under **Naruto / Special** in the Pet Manager\n\n"
-    "### How to get it\n"
-    "Open the app → **System Tray → Check for Updates** and the new pet will be "
-    "downloaded automatically. Then open **Manage Pets** and search for `9tail`.\n\n"
+    "## 🐾 New Pets: Mod / Custom Pack (22 Animals)\n\n"
+    "This content release adds **22 brand-new animated pets** under the **Mod / Custom Pets** category:\n\n"
+    "🐔 Chicken · 📎 Clippy · 🦜 Cockatiel · 🦀 Crab · 🦕 Deno · 🐶 Dog · 🦊 Fox · 🐴 Horse\n"
+    "🧬 Mod · 🐒 Monkey · 🔮 Morph · 🐼 Panda · 🦝 Raccoon · 🐀 Rat · 🪨 Rocky · 🦆 Rubber-Duck\n"
+    "💀 Skeleton · 🐌 Snail · 🐍 Snake · 🐻 Totoro · 🐢 Turtle · ⚡ Zappy\n\n"
+    "### Changes\n"
+    "- ✅ Added 22 new animated custom pets\n"
+    "- ❌ Removed: 9tail (Nine-Tailed Fox / Kurama)\n\n"
+    "### How to get the new pets\n"
+    "Open the app → **System Tray → Check for Updates** and all new pets will be "
+    "downloaded automatically. Then open **Manage Pets** and browse **Mod / Custom Pets**.\n\n"
     "---\n"
     "_Content-only release — no app binary change._"
 )
