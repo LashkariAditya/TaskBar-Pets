@@ -149,7 +149,7 @@ def main() -> None:
         result = _upload_asset(upload_url, asset_path, token)
         print(f"    OK: {result.get('browser_download_url', '?')}")
 
-    print(f"\n✅ Release {TAG} published successfully!")
+    print(f"\n[OK] Release {TAG} published successfully!")
     print(f"   {release_url}")
     print("\nUsers will now be notified automatically when they click 'Check for Updates'.")
 
