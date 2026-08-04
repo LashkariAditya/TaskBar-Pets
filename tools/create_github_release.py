@@ -88,14 +88,22 @@ def _upload_asset(upload_url: str, path: Path, token: str) -> dict:
     """Upload a release asset. upload_url has {?name,label} template."""
     base_url = upload_url.split("{")[0]
     url = f"{base_url}?name={path.name}"
-    mime = "application/zip" if path.suffix == ".zip" else "application/json"
+    mime = "application/octet-stream" if path.suffix == ".exe" else ("application/zip" if path.suffix == ".zip" else "application/json")
     data = path.read_bytes()
     headers = dict(HEADERS)
     headers["Authorization"] = f"Bearer {token}"
     headers["Content-Type"] = mime
-    req = urllib.request.Request(url, data=data, headers=headers, method="POST")
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        return json.loads(resp.read().decode())
+
+    last_exc = None
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url, data=data, headers=headers, method="POST")
+            with urllib.request.urlopen(req, timeout=300) as resp:
+                return json.loads(resp.read().decode())
+        except Exception as e:
+            last_exc = e
+            print(f"    Upload attempt {attempt + 1} failed: {e}. Retrying...")
+    raise last_exc
 
 
 def main() -> None:

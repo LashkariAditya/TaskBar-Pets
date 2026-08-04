@@ -240,7 +240,12 @@ class TaskbarPetsApp:
                 )
 
         if status.latest_release and status.app_update_available:
-            staged_exe = download_app_update(status.latest_release)
+            # Use a previously staged exe if available, otherwise download fresh
+            if status.staged_exe is not None:
+                staged_exe = status.staged_exe
+                print(f"Reusing already-staged exe: {staged_exe}")
+            else:
+                staged_exe = download_app_update(status.latest_release)
             current_exe = get_pinned_executable_path()
             if staged_exe is not None and current_exe is not None:
                 if schedule_executable_update(staged_exe, current_exe):

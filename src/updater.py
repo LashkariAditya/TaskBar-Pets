@@ -75,6 +75,7 @@ class UpdateStatus:
     app_update_available: bool
     content_update_available: bool
     message: str | None = None
+    staged_exe: Path | None = None
 
 
 @dataclass(frozen=True)
@@ -129,6 +130,14 @@ def fetch_release_manifest(release: ReleaseInfo) -> ReleaseManifest | None:
         return None
 
 
+def get_staged_app_update() -> Path | None:
+    """Return the path to a previously staged app exe if it exists and is valid."""
+    staged = get_data_dir() / "updates" / APP_ASSET_NAME
+    if staged.is_file() and staged.stat().st_size > 1_000_000:
+        return staged
+    return None
+
+
 def check_for_updates() -> UpdateStatus:
     release = fetch_latest_release()
     if release is None:
@@ -138,9 +147,23 @@ def check_for_updates() -> UpdateStatus:
     app_version = manifest.app_version if manifest else release.version
     content_version = manifest.content_version if manifest else release.version
     content_asset_name = manifest.content_asset if manifest else CONTENT_ASSET_NAME
-    app_asset_name = manifest.app_asset if manifest else APP_ASSET_NAME
 
     app_update = _version_is_newer(app_version, APP_VERSION)
+
+    # Check if a valid staged exe already exists for this version
+    staged_exe: Path | None = None
+    if app_update:
+        updates_dir = get_data_dir() / "updates"
+        staged_path = updates_dir / APP_ASSET_NAME
+        staged_version_file = updates_dir / "app_version.txt"
+        try:
+            staged_ver = staged_version_file.read_text(encoding="utf-8").strip()
+        except Exception:
+            staged_ver = ""
+        if staged_path.is_file() and staged_path.stat().st_size > 1_000_000:
+            if staged_ver == app_version:
+                staged_exe = staged_path  # Already downloaded — skip re-download
+
     content_version_file = get_data_dir() / "updates" / "content_version.txt"
     try:
         local_content_version = content_version_file.read_text(encoding="utf-8").strip() or "0"
@@ -150,7 +173,7 @@ def check_for_updates() -> UpdateStatus:
     content_update = False
     if release.asset_by_name(content_asset_name) is not None:
         content_update = _version_is_newer(content_version, local_content_version)
-    return UpdateStatus(release, app_update, content_update)
+    return UpdateStatus(release, app_update, content_update, staged_exe=staged_exe)
 
 
 def _safe_extract_zip(zip_file: Path, target_dir: Path) -> None:
