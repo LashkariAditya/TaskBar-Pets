@@ -144,12 +144,16 @@ class TaskbarPetsApp:
         if self.overlay and self.overlay.root.winfo_exists():
 
             def _show():
-                if self.manager_gui is None or not self.manager_gui.root.winfo_exists():
-                    self.manager_gui = PetManagerWindow(
-                        self.config,
-                        on_save_callback=self._on_config_updated,
-                        on_check_updates_callback=self._manual_check_for_updates,
-                    )
+                if self.manager_gui is not None and self.manager_gui.root.winfo_exists():
+                    self.manager_gui.refresh_roster()
+                    self.manager_gui.root.lift()
+                    self.manager_gui.root.focus_force()
+                    return
+                self.manager_gui = PetManagerWindow(
+                    self.config,
+                    on_save_callback=self._on_config_updated,
+                    on_check_updates_callback=self._manual_check_for_updates,
+                )
 
             self.overlay.root.after(0, _show)
 
@@ -180,6 +184,9 @@ class TaskbarPetsApp:
         available = discover_pokemon()
         if not available:
             return
+        max_allowed = getattr(self.config, "max_active_pets", 5)
+        if len(self.config.active_pets) >= max_allowed:
+            return
         choice = random.choice(available)
         if choice not in self.config.active_pets:
             self.config.active_pets.append(choice)
@@ -201,6 +208,10 @@ class TaskbarPetsApp:
         self.pets = _create_pets_from_config(self.config)
         if self.overlay:
             self.overlay.update_pets(self.pets)
+            if self.manager_gui is not None and self.manager_gui.root.winfo_exists():
+                self.overlay.root.after(0, self.manager_gui.refresh_roster)
+        elif self.manager_gui is not None and self.manager_gui.root.winfo_exists():
+            self.manager_gui.refresh_roster()
 
     def _run_update_check(self, manual: bool = False) -> None:
         import webbrowser

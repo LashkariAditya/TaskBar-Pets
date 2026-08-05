@@ -14,18 +14,34 @@ DISPLAY_SCALE = 2  # upscale Gen V sprites for taskbar visibility
 MIN_UPSCALE = 64
 
 GEN_KEYS = ["gen1", "gen2", "gen3", "gen4", "gen5"]
-SPECIAL_KEYS = ["naruto", "mod"]
+SPECIAL_KEYS = ["mod"]
 ASSET_GROUPS = GEN_KEYS + SPECIAL_KEYS + ["pokemon"]
+DISCOVER_GROUPS = GEN_KEYS + SPECIAL_KEYS
+EXCLUDED_PETS = frozenset({"9tail", "ninetales"})
 GEN_LABELS = {
-    "gen1": "Generation 1 (Kanto)",
-    "gen2": "Generation 2 (Johto)",
-    "gen3": "Generation 3 (Hoenn)",
-    "gen4": "Generation 4 (Sinnoh)",
-    "gen5": "Generation 5 (Unova)",
-    "naruto": "Naruto / Special",
-    "mod": "Mod / Custom Pets",
-    "all": "All Generations",
+    "gen1": "Gen 1",
+    "gen2": "Gen 2",
+    "gen3": "Gen 3",
+    "gen4": "Gen 4",
+    "gen5": "Gen 5",
+    "mod": "Mod / Custom",
+    "all": "All",
 }
+
+
+def _folder_has_sprites(folder: Path) -> bool:
+    return bool(list(folder.glob("*.gif")) + list(folder.glob("*.png")))
+
+
+def _collect_pet_names(group_dir: Path) -> list[str]:
+    names: list[str] = []
+    if not group_dir.is_dir():
+        return names
+    for folder in sorted(group_dir.iterdir()):
+        if folder.is_dir() and folder.name not in EXCLUDED_PETS and _folder_has_sprites(folder):
+            if folder.name not in names:
+                names.append(folder.name)
+    return names
 
 
 def get_pokemon_folder(pokemon_name: str) -> Path | None:
@@ -39,38 +55,31 @@ def get_pokemon_folder(pokemon_name: str) -> Path | None:
 
 
 def discover_pokemon_by_gen() -> dict[str, list[str]]:
-    """Return dictionary mapping gen key ('gen1'..'gen5') to sorted list of pokemon names."""
+    """Return dictionary mapping gen key ('gen1'..'gen5', 'mod') to sorted pet names."""
     result: dict[str, list[str]] = {}
 
-    for gen in GEN_KEYS + SPECIAL_KEYS:
+    for gen in DISCOVER_GROUPS:
         names: list[str] = []
         for base_dir in get_asset_roots():
-            gen_dir = base_dir / gen
-            if gen_dir.is_dir():
-                for folder in sorted(gen_dir.iterdir()):
-                    if folder.is_dir():
-                        gifs = list(folder.glob("*.gif")) + list(folder.glob("*.png"))
-                        if gifs and folder.name not in names:
-                            names.append(folder.name)
+            for pet_name in _collect_pet_names(base_dir / gen):
+                if pet_name not in names:
+                    names.append(pet_name)
         result[gen] = names
     return result
 
 
 def discover_pokemon() -> list[str]:
-    """Return all available pokemon names sorted across all generations."""
-    by_gen = discover_pokemon_by_gen()
+    """Return all available pet names sorted across all generations and mod packs."""
     all_names: set[str] = set()
-    for gen_list in by_gen.values():
+    for gen_list in discover_pokemon_by_gen().values():
         all_names.update(gen_list)
 
-    if not all_names:
-        for base_dir in get_asset_roots():
-            for group in ASSET_GROUPS:
-                pokemon_dir = base_dir / group
-                if pokemon_dir.is_dir():
-                    for folder in sorted(pokemon_dir.iterdir()):
-                        if folder.is_dir():
-                            all_names.add(folder.name)
+    for base_dir in get_asset_roots():
+        for group in ASSET_GROUPS:
+            if group in DISCOVER_GROUPS:
+                continue
+            for pet_name in _collect_pet_names(base_dir / group):
+                all_names.add(pet_name)
 
     return sorted(all_names)
 

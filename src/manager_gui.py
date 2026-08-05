@@ -226,16 +226,11 @@ class PetManagerWindow:
     # ─────────────────────────────────────────────────────────────────────────
 
     def _build_roster_tab(self, parent: tk.Frame) -> None:
-        from src.sprites import discover_pokemon_by_gen, discover_pokemon, GEN_KEYS
+        from src.sprites import discover_pokemon_by_gen, discover_pokemon, GEN_KEYS, SPECIAL_KEYS, GEN_LABELS
 
-        by_gen = discover_pokemon_by_gen()
-        all_pokemon = discover_pokemon()
-
-        # Initialize selection vars for ALL pokemon
-        for p_name in all_pokemon:
-            if p_name not in self.selected_pets:
-                self.selected_pets[p_name] = tk.BooleanVar(
-                    value=(p_name in self.config.active_pets))
+        self._roster_parent = parent
+        self._roster_discover = discover_pokemon
+        self._roster_discover_by_gen = discover_pokemon_by_gen
 
         # ── Search Bar ────────────────────────────────────────────────────
         search_outer = tk.Frame(parent, bg=BG, padx=24, pady=14)
@@ -284,11 +279,9 @@ class PetManagerWindow:
         self.current_gen = tk.StringVar(value="all")
         self._gen_btn_widgets: dict[str, tk.Label] = {}
 
-        all_gen_options = [
-            ("All", "all"), ("Gen 1", "gen1"), ("Gen 2", "gen2"),
-            ("Gen 3", "gen3"), ("Gen 4", "gen4"), ("Gen 5", "gen5"),
-            ("Naruto", "naruto"),
-        ]
+        all_gen_options = [("All", "all")]
+        for gen_key in GEN_KEYS + SPECIAL_KEYS:
+            all_gen_options.append((GEN_LABELS.get(gen_key, gen_key), gen_key))
 
         for label_text, gen_code in all_gen_options:
             is_active = (gen_code == "all")
@@ -307,7 +300,8 @@ class PetManagerWindow:
         action_row = tk.Frame(parent, bg=BG, padx=24, pady=8)
         action_row.pack(fill="x")
 
-        count_lbl = tk.Label(action_row, text="0/5 selected",
+        max_init = getattr(self.config, "max_active_pets", 5)
+        count_lbl = tk.Label(action_row, text=f"0/{max_init} selected",
                              font=("Segoe UI", 9),
                              bg=BG, fg=SUBTEXT)
         count_lbl.pack(side="left")
@@ -364,14 +358,25 @@ class PetManagerWindow:
 
         def _update_count():
             n = sum(v.get() for v in self.selected_pets.values())
-            if n >= 5:
-                count_lbl.configure(text=f"✓ {n}/5 selected  (max reached)", fg=GREEN)
+            max_allowed = getattr(self.config, "max_active_pets", 5)
+            if n >= max_allowed:
+                count_lbl.configure(text=f"✓ {n}/{max_allowed} selected  (max reached)", fg=GREEN)
             else:
-                count_lbl.configure(text=f"{n}/5 selected", fg=SUBTEXT)
+                count_lbl.configure(text=f"{n}/{max_allowed} selected", fg=SUBTEXT)
 
         self._update_count = _update_count
 
+        def _sync_selection_vars(all_pokemon: list[str]) -> None:
+            for p_name in all_pokemon:
+                if p_name not in self.selected_pets:
+                    self.selected_pets[p_name] = tk.BooleanVar(
+                        value=(p_name in self.config.active_pets))
+
         def _render_grid(*_):
+            by_gen = self._roster_discover_by_gen()
+            all_pokemon = self._roster_discover()
+            _sync_selection_vars(all_pokemon)
+
             for w in scroll_frame.winfo_children():
                 w.destroy()
 
@@ -441,9 +446,10 @@ class PetManagerWindow:
                     current_count = sum(
                         var_item.get() for var_item in self.selected_pets.values()
                     )
-                    if not v.get() and current_count >= 5:
+                    max_allowed = getattr(self.config, "max_active_pets", 5)
+                    if not v.get() and current_count >= max_allowed:
                         count_lbl.configure(
-                            text="⚠  Max 5 pets — deselect one first", fg=RED
+                            text=f"⚠  Max {max_allowed} pets — deselect one first", fg=RED
                         )
                         return
                     v.set(not v.get())
@@ -503,7 +509,13 @@ class PetManagerWindow:
             btn.bind("<Button-1>", lambda _, g=gen_code: _select_gen(g))
 
         search_var.trace_add("write", lambda *_: _render_grid())
+        self._render_roster_grid = _render_grid
         _render_grid()
+
+    def refresh_roster(self) -> None:
+        """Re-scan asset folders and rebuild the roster grid."""
+        if hasattr(self, "_render_roster_grid"):
+            self._render_roster_grid()
 
     # ─────────────────────────────────────────────────────────────────────────
     # Settings Tab
@@ -644,9 +656,10 @@ class PetManagerWindow:
     # ─────────────────────────────────────────────────────────────────────────
 
     def _select_all(self) -> None:
+        max_allowed = getattr(self.config, "max_active_pets", 5)
         count = 0
         for var in self.selected_pets.values():
-            if count < 5:
+            if count < max_allowed:
                 var.set(True)
                 count += 1
             else:
@@ -656,8 +669,14 @@ class PetManagerWindow:
 
     def _select_default(self) -> None:
         from config import DEFAULT_ROSTER
+        max_allowed = getattr(self.config, "max_active_pets", 5)
+        selected = 0
         for p_name, var in self.selected_pets.items():
-            var.set(p_name in DEFAULT_ROSTER)
+            if selected < max_allowed and p_name in DEFAULT_ROSTER:
+                var.set(True)
+                selected += 1
+            else:
+                var.set(False)
         if hasattr(self, "_update_count"):
             self._update_count()
 
@@ -672,7 +691,8 @@ class PetManagerWindow:
         if not active:
             active = ["pikachu"]
 
-        active = active[:5]  # enforce max 5 pets
+        max_allowed = getattr(self.config, "max_active_pets", 5)
+        active = active[:max_allowed]
 
         self.config.active_pets       = active
         self.config.pet_scale         = round(self.scale_var.get(), 2)
